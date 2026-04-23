@@ -27,7 +27,7 @@ El objetivo de este espacio es mantener un historial versionado de nuestras acti
 
 | Avatar | Integrante | GitHub |
 | :---: | :--- | :--- |
-| <img src="https://github.com/Stephan-123.png" width="50px;" style="border-radius:50%;"/> | **Lang Stephan Emmanuel** | [Stephan-123](https://github.com/Stephan-123) |
+| <img src="https://github.com/Stephan-123.png" width="50px;" style="border-radius:50%;"/> | **Lang Stephan Emmanuel** | [Stephan-132](https://github.com/Stephan-132) |
 | <img src="https://github.com/Franco-trycatch.png" width="50px;" style="border-radius:50%;"/> | **Cañete Franco Neyen** | [Franco-trycatch](https://github.com/Franco-trycatch) |
 | <img src="https://github.com/lucaval3ntino-stack.png" width="50px;" style="border-radius:50%;"/> | **Garda Morel Lucas Valentino** | [lucaval3ntino-stack](https://github.com/lucaval3ntino-stack) |
 | <img src="https://github.com/Taikaros.png" width="50px;" style="border-radius:50%;"/> | **Sosa Hugo Alberto Gabriel** | [@Taikaros](https://github.com/Taikaros) |

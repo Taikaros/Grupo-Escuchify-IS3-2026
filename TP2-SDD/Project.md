@@ -40,22 +40,6 @@ Algunos detalles:
 3. Como organizador, quiero cancelar un evento, para informar a los participantes.
    - Criterio de aceptación: El evento cambia a estado "CANCELADO"; se notifica a todos los participantes inscritos.
 
-### Módulo 3: Inscripciones
-1. Como usuario autenticado, quiero inscribirme de forma autónoma a un evento, para participar en él.
-   - Criterio de aceptación: La inscripción se registra si hay cupo disponible y no ha pasado la fecha límite; se genera confirmación automática.
-2. Como personal del evento, quiero inscribir a un participante manualmente, para casos de registro fuera de la plataforma.
-   - Criterio de aceptación: El personal puede buscar usuarios existentes o crear registros temporales; se validan cupos y fechas límite.
-3. Como usuario, quiero cancelar mi inscripción a un evento, para liberar cupo.
-   - Criterio de aceptación: La cancelación es posible hasta 24 horas antes del evento; se libera el cupo ocupado.
-
-### Módulo 6: Certificados
-1. Como organizador, quiero generar certificados de asistencia para participantes acreditados, para validar su participación.
-   - Criterio de aceptación: El certificado se genera en formato PDF; incluye nombre del participante, evento, fecha y tipo de certificado.
-2. Como disertante, quiero generar un certificado de participación como expositor, para mi currículum.
-   - Criterio de aceptación: El certificado se genera automáticamente para usuarios con rol de disertante en el evento.
-3. Como organizador, quiero generar certificados de aprobación para participantes que cumplan con requisitos, para validar su evaluación.
-   - Criterio de aceptación: Se generan certificados solo para participantes que aprueben la evaluación del evento; se registra la calificación obtenida.
-
 ### Módulo 7: Informes y Agendas
 1. Como organizador, quiero generar un informe de inscripciones de un evento, para conocer la demanda.
    - Criterio de aceptación: El informe incluye total de inscritos, acreditados, cancelados y lista detallada; se exporta a PDF/Excel.
@@ -80,31 +64,7 @@ Algunos detalles:
 - RN2: La fecha límite de inscripción debe ser anterior a la fecha de inicio del evento.
 - RN3: El cupo máximo no puede ser menor al cupo mínimo (si se definen ambos).
 - RN4: Solo el organizador creador del evento puede editarlo o cancelarlo.
-
-### Módulo 3: Inscripciones
-#### Requisitos Funcionales
-- RF1: El sistema debe permitir inscripciones autónomas para usuarios autenticados.
-- RF2: El sistema debe permitir inscripciones manuales por personal del evento.
-- RF3: El sistema debe validar cupo disponible y fecha límite antes de confirmar inscripción.
-- RF4: El sistema debe permitir la cancelación de inscripciones por parte del usuario.
-
-#### Reglas de Negocio
-- RN1: No se permiten inscripciones si se alcanzó el cupo máximo del evento.
-- RN2: No se permiten inscripciones después de la fecha límite establecida.
-- RN3: Solo se puede cancelar una inscripción hasta 24 horas antes del inicio del evento.
-- RN4: Un usuario no puede inscribirse dos veces al mismo evento.
-
-### Módulo 6: Certificados
-#### Requisitos Funcionales
-- RF1: El sistema debe generar certificados de asistencia para participantes acreditados.
-- RF2: El sistema debe generar certificados de aprobación para participantes que cumplan requisitos.
-- RF3: El sistema debe generar certificados de participación para disertantes.
-
-#### Reglas de Negocio
-- RN1: Los certificados de asistencia solo se generan para participantes con acreditación confirmada.
-- RN2: Los certificados de aprobación requieren una calificación mínima definida por el organizador.
-- RN3: Los certificados de participación (expositor/autor) se generan automáticamente para usuarios con rol de disertante.
-
+- 
 ### Módulo 7: Informes y Agendas
 #### Requisitos Funcionales
 - RF1: El sistema debe generar informes de inscripciones por evento.
@@ -181,43 +141,6 @@ Relaciones:
 - 1:N Evento -> Informe (Referencia: Informe.id_evento FK)
 - 1:N Evento -> AgendaEvento (Referencia: AgendaEvento.id_evento FK)
 
-### Módulo 3: Inscripciones
-#### Entidad: Inscripción
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_inscripcion | INT | NOT NULL AUTO_INCREMENT | PK |
-| id_usuario | INT | NOT NULL | FK (Usuario.id_usuario) |
-| id_evento | INT | NOT NULL | FK (Evento.id_evento) |
-| fecha_inscripcion | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP | |
-| estado | VARCHAR(20) | NOT NULL DEFAULT 'CONFIRMADA' | |
-
-Relaciones:
-- N:1 Inscripción -> Usuario (Referencia: Usuario.id_usuario PK)
-- N:1 Inscripción -> Evento (Referencia: Evento.id_evento PK)
-- 1:N Inscripción -> Certificado (Referencia: Certificado.id_inscripcion FK)
-
-### Módulo 6: Certificados
-#### Entidad: TipoCertificado
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_tipo_certificado | INT | NOT NULL AUTO_INCREMENT | PK |
-| nombre | VARCHAR(50) | NOT NULL UNIQUE | |
-
-#### Entidad: Certificado
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_certificado | INT | NOT NULL AUTO_INCREMENT | PK |
-| id_inscripcion | INT | NOT NULL | FK (Inscripción.id_inscripcion) |
-| id_evento | INT | NOT NULL | FK (Evento.id_evento) |
-| id_tipo_certificado | INT | NOT NULL | FK (TipoCertificado.id_tipo_certificado) |
-| fecha_emision | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP | |
-| calificacion | DECIMAL(5,2) | | |
-
-Relaciones:
-- N:1 Certificado -> Inscripción (Referencia: Inscripción.id_inscripcion PK)
-- N:1 Certificado -> Evento (Referencia: Evento.id_evento PK)
-- N:1 Certificado -> TipoCertificado (Referencia: TipoCertificado.id_tipo_certificado PK)
-
 ### Módulo 7: Informes y Agendas
 #### Entidad: Informe
 | Atributo | Tipo de dato | Restricciones | PK/FK |
@@ -256,19 +179,6 @@ Total de días hábiles sumados de todas las tareas: 53 días hábiles → 10.6 
 4. Validación de reglas de negocio (fechas, cupos): 1 día
 5. Pruebas unitarias y de integración: 3 días
 
-### Módulo 3: Inscripciones (Total: 9 días hábiles)
-1. Diseño y documentación de entidades y endpoints: 2 días
-2. Desarrollo de inscripción autónoma: 2 días
-3. Desarrollo de inscripción manual por personal: 2 días
-4. Desarrollo de cancelación de inscripciones: 1 día
-5. Pruebas unitarias y de integración: 2 días
-
-### Módulo 6: Certificados (Total: 9 días hábiles)
-1. Diseño y documentación de entidades y endpoints: 2 días
-2. Desarrollo de generación de certificados por tipo: 3 días
-3. Desarrollo de exportación a PDF: 2 días
-4. Pruebas unitarias y de integración: 2 días
-
 ### Módulo 7: Informes y Agendas (Total: 9 días hábiles)
 1. Diseño y documentación de entidades y endpoints: 2 días
 2. Desarrollo de generación de informes: 3 días
@@ -288,26 +198,6 @@ Total de días hábiles sumados de todas las tareas: 53 días hábiles → 10.6 
   1. Crear evento con fecha límite > fecha inicio → Espera error 400 con mensaje "FECHA_LIMITE_INVALIDA"
   2. Editar evento con inscripciones confirmadas → Espera error 400 con mensaje "EVENTO_CON_INSCRIPCIONES"
   3. Cancelar evento → Espera estado "CANCELADO" y notificación a inscritos
-
-### Módulo 3: Inscripciones
-- **Tipo de Prueba**: Unitarias (validación de cupos/fechas), Integración (BD), Aceptación (usuario/participante)
-- **Alcance**: Inscripción autónoma/manual, cancelación, validación de cupos
-- **Criterio de Aceptación**: Inscripciones solo se confirman si hay cupo y dentro de fecha límite; cancelación libera cupo.
-- **Criterio de Rechazo**: Permite inscripción con cupo lleno; permite cancelación después de fecha límite.
-- **Casos de Prueba de Ejemplo**:
-  1. Inscribir a usuario cuando cupo máximo alcanzado → Espera error 400 con mensaje "CUPO_LLENO"
-  2. Inscribir después de fecha límite → Espera error 400 con mensaje "FECHA_LIMITE_EXPIRADA"
-  3. Cancelar inscripción 12 horas antes del evento → Espera error 400 con mensaje "CANCELACION_NO_PERMITIDA"
-
-### Módulo 6: Certificados
-- **Tipo de Prueba**: Unitarias (generación de certificados), Integración (BD), Aceptación (organizador/participante)
-- **Alcance**: Generación de certificados por tipo, exportación a PDF
-- **Criterio de Aceptación**: Certificados se generan solo para usuarios con requisitos cumplidos; PDF válido.
-- **Criterio de Rechazo**: Genera certificado de asistencia para usuario no acreditado; PDF corrupto.
-- **Casos de Prueba de Ejemplo**:
-  1. Generar certificado de asistencia para usuario no acreditado → Espera error 400 con mensaje "NO_ACREDITADO"
-  2. Generar certificado de aprobación sin calificación mínima → Espera error 400 con mensaje "CALIFICACION_INSUFICIENTE"
-  3. Descargar certificado en PDF → Espera archivo PDF válido con datos correctos
 
 ### Módulo 7: Informes y Agendas
 - **Tipo de Prueba**: Unitarias (generación de informes), Integración (BD), Aceptación (organizador)

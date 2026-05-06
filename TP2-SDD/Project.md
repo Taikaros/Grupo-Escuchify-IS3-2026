@@ -32,13 +32,6 @@ Algunos detalles:
 ---
 
 ## 2. Historias de Usuario y Criterios de Aceptación
-### Módulo 1: Usuarios y Autenticación
-1. Como participante, quiero registrarme en la plataforma, para poder inscribirme a eventos.
-   - Criterio de aceptación: El usuario puede crear una cuenta con email válido y contraseña segura; el email debe ser único.
-2. Como usuario, quiero iniciar sesión en la plataforma, para acceder a mis inscripciones y datos personales.
-   - Criterio de aceptación: El login con email y contraseña correctos genera un token de sesión y redirige al dashboard del usuario.
-3. Como usuario, quiero editar mi perfil personal, para mantener mis datos actualizados.
-   - Criterio de aceptación: El usuario puede modificar su nombre, apellido y contraseña; se valida que la nueva contraseña cumpla con las reglas de seguridad.
 
 ### Módulo 2: Gestión de Eventos
 1. Como organizador, quiero crear un nuevo evento académico, para publicarlo en la plataforma.
@@ -88,29 +81,10 @@ Algunos detalles:
 3. Como organizador, quiero generar un informe de resultados de encuestas, para evaluar el evento.
    - Criterio de aceptación: El informe incluye promedios de satisfacción y comentarios destacados; se genera solo para eventos finalizados.
 
-### Módulo 8: Catálogo Público
-1. Como usuario no autenticado, quiero ver el listado de eventos públicos, para encontrar eventos de interés.
-   - Criterio de aceptación: El listado muestra todos los eventos activos con título, tipo, fecha y descripción breve.
-2. Como usuario, quiero filtrar eventos por fecha (futuros/pasados), para encontrar eventos según mi disponibilidad.
-   - Criterio de aceptación: El filtro muestra solo eventos con fecha de inicio mayor o igual a hoy (futuros) o menor a hoy (pasados).
-3. Como usuario, quiero buscar eventos por tipo, para encontrar eventos de una categoría específica.
-   - Criterio de aceptación: El buscador filtra eventos por el tipo seleccionado (curso, jornada, congreso, etc).
 
 ---
 
 ## 3. Requisitos Funcionales y Reglas de Negocio
-### Módulo 1: Usuarios y Autenticación
-#### Requisitos Funcionales
-- RF1: El sistema debe permitir el registro de usuarios con email único.
-- RF2: El sistema debe validar que la contraseña tenga mínimo 8 caracteres, mayúsculas, minúsculas y números.
-- RF3: El sistema debe permitir el inicio de sesión con email y contraseña.
-- RF4: El sistema debe permitir la edición de datos personales del usuario.
-
-#### Reglas de Negocio
-- RN1: El email de usuario debe ser único en todo el sistema.
-- RN2: Solo usuarios autenticados pueden realizar inscripciones a eventos.
-- RN3: Las contraseñas se almacenan en formato hash (no texto plano).
-
 ### Módulo 2: Gestión de Eventos
 #### Requisitos Funcionales
 - RF1: El sistema debe permitir el CRUD de eventos académicos.
@@ -181,17 +155,6 @@ Algunos detalles:
 - RN2: Las agendas se muestran públicamente para eventos activos o finalizados.
 - RN3: Los informes de encuestas solo se generan para eventos con encuestas cerradas.
 
-### Módulo 8: Catálogo Público
-#### Requisitos Funcionales
-- RF1: El sistema debe mostrar listado público de todos los eventos activos.
-- RF2: El sistema debe permitir filtrar eventos por fecha (futuros/pasados).
-- RF3: El sistema debe permitir filtrar eventos por tipo.
-
-#### Reglas de Negocio
-- RN1: Solo se muestran eventos con estado "ACTIVO" o "FINALIZADO" en el catálogo.
-- RN2: Los eventos cancelados no aparecen en el catálogo público.
-- RN3: El filtro de eventos futuros muestra eventos con fecha de inicio >= fecha actual.
-
 ---
 
 ## 4. Restricciones técnicas generales del proyecto
@@ -222,28 +185,12 @@ Algunos detalles:
 - Validación de permisos por rol en todos los endpoints protegidos.
 
 ### 4.4 Rendimiento
-- Tiempo de carga de la página de catálogo público < 2 segundos.
 - Tiempo de respuesta de endpoints API (excepto generación de informes) < 500 milisegundos.
 - Paginación en listados que superen los 20 registros (eventos, inscripciones).
 
 ---
 
 ## 5. Modelo de datos por módulo
-### Módulo 1: Usuarios y Autenticación
-#### Entidad: Usuario
-| Atributo | Tipo de dato | Restricciones | PK/FK |
-|----------|--------------|---------------|-------|
-| id_usuario | INT | NOT NULL AUTO_INCREMENT | PK |
-| email | VARCHAR(255) | NOT NULL UNIQUE | |
-| password_hash | VARCHAR(255) | NOT NULL | |
-| nombre | VARCHAR(100) | NOT NULL | |
-| apellido | VARCHAR(100) | NOT NULL | |
-| fecha_registro | DATETIME | NOT NULL DEFAULT CURRENT_TIMESTAMP | |
-| activo | BOOLEAN | NOT NULL DEFAULT TRUE | |
-
-Relaciones:
-- 1:N Usuario -> Inscripción (Referencia: Inscripción.id_usuario FK)
-
 ### Módulo 2: Gestión de Eventos
 #### Entidad: TipoEvento
 | Atributo | Tipo de dato | Restricciones | PK/FK |
@@ -394,21 +341,11 @@ Relaciones:
 - 1:N AgendaEvento -> Evento (Referencia: Evento.id_evento PK)
 - N:1 AgendaEvento -> Usuario (Referencia: Usuario.id_usuario PK, para disertante)
 
-### Módulo 8: Catálogo Público
-No tiene entidades originales. Consulta la entidad `Evento` del módulo Gestión de Eventos vía endpoints REST definidos en Contract.md.
-
 ---
 
 ## 6. Plan de Tareas
 ### Tiempo Total Estimado del Proyecto
 Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 semanas (~14 semanas totales).
-
-### Módulo 1: Usuarios y Autenticación (Total: 10 días hábiles)
-1. Diseño y documentación de entidades y endpoints: 3 días
-2. Desarrollo de registro de usuarios: 2 días
-3. Desarrollo de inicio de sesión y generación de tokens: 2 días
-4. Desarrollo de edición de perfil: 1 día
-5. Pruebas unitarias y de integración: 2 días
 
 ### Módulo 2: Gestión de Eventos (Total: 11 días hábiles)
 1. Diseño y documentación de entidades y endpoints: 3 días
@@ -448,24 +385,9 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
 3. Desarrollo de creación de agendas: 2 días
 4. Pruebas unitarias y de integración: 2 días
 
-### Módulo 8: Catálogo Público (Total: 5 días hábiles)
-1. Diseño y documentación de endpoints: 1 día
-2. Desarrollo de listado público de eventos: 2 días
-3. Desarrollo de filtros (fecha, tipo): 1 día
-4. Pruebas unitarias y de integración: 1 día
-
 ---
 
 ## 7. Estrategia de Verificación
-### Módulo 1: Usuarios y Autenticación
-- **Tipo de Prueba**: Unitarias (lógica de registro/login), Integración (conexión BD), Aceptación (usuario final)
-- **Alcance**: Registro, login, edición de perfil, validación de email único
-- **Criterio de Aceptación**: Todas las funcionalidades cumplen con los requisitos definidos; no hay vulnerabilidades de seguridad en contraseñas.
-- **Criterio de Rechazo**: Falla en validación de email único; contraseñas almacenadas en texto plano; login permite credenciales incorrectas.
-- **Casos de Prueba de Ejemplo**:
-  1. Registrar usuario con email duplicado → Espera error 400 con mensaje "EMAIL_DUPLICADO"
-  2. Login con contraseña incorrecta → Espera error 401 con mensaje "CREDENCIALES_INVALIDAS"
-  3. Editar perfil con contraseña de 6 caracteres → Espera error 400 con mensaje "CONTRASEÑA_INVALIDA"
 
 ### Módulo 2: Gestión de Eventos
 - **Tipo de Prueba**: Unitarias (validación de fechas/cupos), Integración (CRUD BD), Aceptación (organizador)
@@ -527,12 +449,3 @@ Total de días hábiles sumados de todas las tareas: 69 días hábiles → 13.8 
   2. Crear agenda para evento cancelado → Espera error 400 con mensaje "EVENTO_CANCELADO"
   3. Exportar informe a Excel → Espera archivo Excel válido con datos correctos
 
-### Módulo 8: Catálogo Público
-- **Tipo de Prueba**: Unitarias (filtros), Integración (consulta a Gestión de Eventos), Aceptación (usuario no autenticado)
-- **Alcance**: Listado público, filtros por fecha/tipo
-- **Criterio de Aceptación**: Listado muestra solo eventos activos/finalizados; filtros funcionan correctamente.
-- **Criterio de Rechazo**: Muestra eventos cancelados; filtro de futuros muestra eventos pasados.
-- **Casos de Prueba de Ejemplo**:
-  1. Ver catálogo → Espera lista sin eventos cancelados
-  2. Filtrar eventos futuros → Espera solo eventos con fecha inicio >= hoy
-  3. Filtrar por tipo "Congreso" → Espera solo eventos de tipo Congreso

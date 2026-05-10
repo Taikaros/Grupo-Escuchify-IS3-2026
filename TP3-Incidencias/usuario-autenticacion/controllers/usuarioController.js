@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const db = require("../config/database");
+
+const JWT_SECRET = process.env.JWT_SECRET || "escuchify_secret_key_2026";
 
 const registro = async (req, res) => {
     try {
@@ -24,4 +27,31 @@ const registro = async (req, res) => {
     }
 };
 
-module.exports = { registro };
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const [usuarios] = await db.query("SELECT id_usuario, email, password_hash FROM Usuario WHERE email = ?", [email]);
+        if (usuarios.length === 0) {
+            return res.status(401).json({ error: "CREDENCIALES_INVALIDAS", message: "Email o contraseña incorrectos" });
+        }
+
+        const usuario = usuarios[0];
+        const passwordValida = await bcrypt.compare(password, usuario.password_hash);
+        if (!passwordValida) {
+            return res.status(401).json({ error: "CREDENCIALES_INVALIDAS", message: "Email o contraseña incorrectos" });
+        }
+
+        const token = jwt.sign(
+            { id_usuario: usuario.id_usuario, email: usuario.email },
+            JWT_SECRET,
+            { expiresIn: "24h" }
+        );
+
+        res.status(200).json({ token, id_usuario: usuario.id_usuario });
+    } catch (error) {
+        res.status(500).json({ error: "ERROR_INTERNO", message: "Error al iniciar sesión" });
+    }
+};
+
+module.exports = { registro, login };

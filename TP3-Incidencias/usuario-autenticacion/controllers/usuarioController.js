@@ -54,4 +54,59 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { registro, login };
+const obtenerPerfil = async (req, res) => {
+    try {
+        const { id_usuario } = req.params;
+
+        const [usuarios] = await db.query(
+            "SELECT id_usuario, email, nombre, apellido, fecha_registro FROM Usuario WHERE id_usuario = ?",
+            [id_usuario]
+        );
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({ error: "NO_ENCONTRADO", message: "Usuario no encontrado" });
+        }
+
+        res.status(200).json(usuarios[0]);
+    } catch (error) {
+        res.status(500).json({ error: "ERROR_INTERNO", message: "Error al obtener perfil" });
+    }
+};
+
+const editarPerfil = async (req, res) => {
+    try {
+        const { id_usuario } = req.params;
+        const tokenId = req.usuario.id_usuario;
+
+        if (parseInt(id_usuario) !== tokenId) {
+            return res.status(403).json({ error: "NO_AUTORIZADO", message: "No tienes permiso para editar este perfil" });
+        }
+
+        const [usuarios] = await db.query("SELECT id_usuario FROM Usuario WHERE id_usuario = ?", [id_usuario]);
+        if (usuarios.length === 0) {
+            return res.status(404).json({ error: "NO_ENCONTRADO", message: "Usuario no encontrado" });
+        }
+
+        const { nombre, apellido, password } = req.body;
+        let updateQuery = "UPDATE Usuario SET nombre = ?, apellido = ?";
+        const params = [nombre, apellido];
+
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const password_hash = await bcrypt.hash(password, salt);
+            updateQuery += ", password_hash = ?";
+            params.push(password_hash);
+        }
+
+        updateQuery += " WHERE id_usuario = ?";
+        params.push(parseInt(id_usuario));
+
+        await db.query(updateQuery, params);
+
+        res.status(200).json({ mensaje: "Perfil actualizado" });
+    } catch (error) {
+        res.status(500).json({ error: "ERROR_INTERNO", message: "Error al editar perfil" });
+    }
+};
+
+module.exports = { registro, login, obtenerPerfil, editarPerfil };

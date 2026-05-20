@@ -40,7 +40,9 @@ A continuación se listan las actividades desarrolladas por el grupo **N10** dur
 | Actividad | Descripción | Acceso |
 | :--- | :--- | :--- |
 | **TP Nº 2** | Plan de Diseño de Software (SDD) | [📂 Ver Carpeta](./TP2-SDD) |
-| **TP Nº 3** | [Nombre del TP siguiente] | ⏳ *Próximamente* |
+| **TP Nº 3** | [Gestion de Insidencias]  |  [📂 Ver Carpeta](./TP3-Insidencias) |
+| **TP Nº 4** | [Analisis y Gestion de Riesgo] | [📂 Ver Carpeta](./TP4-Riesgo) |
+| **TP Nº 5** | [Nombre del TP siguiente] | ⏳ *Próximamente* |
 ---
 ## 🤝 Contribuciones
 Este es un proyecto  para fines académicos de la cátedra Ingeniería de Software 3 (UNaM). El acceso y las contribuciones están limitados a los integrantes del **Escuchify** y/o **Profesores**.

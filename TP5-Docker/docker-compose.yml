@@ -1,0 +1,20 @@
+services:
+  escuchify-app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - escuchify-db
+    environment:
+      - DB_HOST=escuchify-db
+      - DB_USER=root
+      - DB_PASS=admin
+
+  escuchify-db:
+    image: postgres:15-alpine # O mysql:8, mongo, etc.
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=admincl
+      - POSTGRES_DB=escuchify
